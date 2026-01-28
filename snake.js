@@ -28,3 +28,12 @@ function update() {
         return;
     }}
 
+class Snek{
+        constructor(x, y, size){
+            this.x = x;
+            this.y = y;
+            this.size = size;
+    }
+     movement(){ 
+        
+       }}
