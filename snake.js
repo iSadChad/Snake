@@ -30,10 +30,18 @@ function update() {
 
 class Snek{
         constructor(x, y, size){
-            this.x = x;
-            this.y = y;
-            this.size = size;
-    }
+            this.x = x
+            this.y = y
+            this.size = size
+            this.rotationX = 0
+            this.rotationY = 1
+        }
      movement(){ 
-        
+        let direction 
+
+        if ( this.rotationX == 1) {
+            direction = {
+                
+            }
+        }
        }}
