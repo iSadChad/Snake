@@ -33,13 +33,13 @@ class Snek{
             this.x = x
             this.y = y
             this.size = size
-            this.rotationX = 0
-            this.rotationY = 1
+            this.dirX = 0
+            this.dirY = 1
         }
      movement(){ 
         let direction 
 
-        if ( this.rotationX == 1) {
+        if ( this.dirX == 1) {
             direction = {
                 
             }
