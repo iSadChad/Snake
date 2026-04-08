@@ -71,6 +71,12 @@ class Snek{
 
 class Apple{
     constructor(){
-        
+        let onSnake
+
+        while (true) {
+            onSnake = false;
+            this.x = Math.floor(Math.random() * rows / snakeBody.size) * snakeBody.size
+            this.y
     }
+}
 }
