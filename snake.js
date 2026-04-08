@@ -37,11 +37,40 @@ class Snek{
             this.dirY = 1
         }
      movement(){ 
-        let direction 
+        let position 
 
         if ( this.dirX == 1) {
-            direction = {
-                
+            position = {
+                x: this.x + this.size,
+                y: this.y
             }
+        } else if ( this.dirX == -1) {
+            position = {
+                x: this.x - this.size,
+                y: this.y
         }
-       }}
+        } else if ( this.dirY == 1) {
+            position = {
+                x: this.x,
+                y: this.y + this.size
+        }
+        } else if ( this.dirY == -1) {
+            position = {
+                x: this.x,
+                y: this.y - this.size
+        }
+        }
+        return position
+         }
+
+    tail(){
+        
+    }
+    
+    }
+
+class Apple{
+    constructor(){
+        
+    }
+}
