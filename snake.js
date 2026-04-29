@@ -26,10 +26,23 @@ function show() {
 function update() {
     if (gameOver) {
         return;
-    }}
+    }
+    wallCollision();
+}
 
 function wallCollision() {
-    
+    if (snek.x == 0 && snek.dirX == -1) {
+        gameOver = true;
+    }
+    if (snek.x == cols && snek.dirX == 1) {
+        gameOver = true;
+    }
+    if (snek.y == 0 && snek.dirY == -1) {
+        gameOver = true;
+    }
+    if (snek.y == rows && snek.dirY == 1) {
+        gameOver = true;
+    }
 }
 
 class Snek{
