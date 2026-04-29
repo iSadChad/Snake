@@ -28,6 +28,10 @@ function update() {
         return;
     }}
 
+function wallCollision() {
+    
+}
+
 class Snek{
         constructor(x, y, size){
             this.x = x
@@ -63,7 +67,9 @@ class Snek{
         return position
          }
 
-    tail(){
+    tail(){ 
+        snakeBody.push({x: this.x, y: this.y})
+
         
     }
     
@@ -75,8 +81,11 @@ class Apple{
 
         while (true) {
             onSnake = false;
-            this.x = Math.floor(Math.random() * rows / snakeBody.size) * snakeBody.size
-            this.y
+            this.x = Math.floor(Math.random() * rows / blocksize) * blocksize
+            this.y = Math.floor(Math.random() * cols / blocksize) * blocksize
+        }
     }
 }
-}
+
+const snek = new Snek(10,10,10);
+let apple = new Apple();
