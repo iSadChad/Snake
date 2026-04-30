@@ -55,13 +55,16 @@ function wallCollision() {
 }
 
 function draw() {
-    boardContext.fillStyle = "black";
-    boardContext.fillText("Score: " + snakeBody.length, 10, 20);
-        boardContext.fillStyle = "red";
-        boardContext.fillRect(apple.x, apple.y, blocksize, blocksize);
+    createRect(0,0,board.width, board.height, "black")
 
-        boardContext.fillStyle = "green";
-        boardContext.fillRect(snek.x, snek.y, blocksize, blocksize);
+    boardContext.fillText("Score: " + snakeBody.length, 10, 20);
+    boardContext.fillStyle = "red";
+    boardContext.fillRect(apple.x, apple.y, blocksize, blocksize);
+
+    boardContext.fillStyle = "green";
+    boardContext.fillRect(snek.x, snek.y, blocksize, blocksize);
+    boardContext.fillStyle = "white";
+    boardContext.font = "16px lucida console";
 }
 
 class Snek{
