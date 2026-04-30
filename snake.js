@@ -5,8 +5,6 @@ const canvas = document.getElementById("board");
 const boardContext = canvas.getContext("2d");
 
 
-let snakeBody = [];
-
 let gameOver = false;
 
 
@@ -59,14 +57,15 @@ function wallCollision() {
 function draw() {
     createRect(0,0,canvas.width, canvas.height, "black")
 
-    boardContext.fillText("Score: " + snakeBody.length, 10, 20);
-    boardContext.fillStyle = "red";
-    boardContext.fillRect(apple.x, apple.y, blocksize, blocksize);
+    for (var i =0; i < snek.length; i++) {
+        createRect(snek[i].x +2.5, snek[i].y + 2.5, snek[i].size - 5, snek[i].size - 5, "green")
+    }
+    
 
-    boardContext.fillStyle = "green";
-    boardContext.fillRect(snek.x, snek.y, blocksize, blocksize);
     boardContext.fillStyle = "white";
-    boardContext.font = "16px lucida console";
+    boardContext.font = "16px helvetica";
+    boardContext.fillText("Score: " + snakeBody.length, 10, 20);
+    createRect(apple.x, apple.y, apple.size, apple.size, apple.color);
 }
 
 class Snek{
