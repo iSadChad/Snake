@@ -1,8 +1,8 @@
 const blocksize = 20;
 const rows = 30;
 const cols = 30;
-const board = document.getElementById("board");
-const boardContext = board.getContext("2d");
+const canvas = document.getElementById("board");
+const boardContext = canvas.getContext("2d");
 
 
 let snakeBody = [];
@@ -27,8 +27,10 @@ function update() {
     if (gameOver) {
         return;
     }
-    boardContext.clearRect(0, 0, board.width, board.height);
+    boardContext.clearRect(0, 0, canvas.width, canvas.height);
     wallCollision();
+    snek.movement();
+    appleYumYum();
 }
 
 function appleYumYum() {
@@ -55,7 +57,7 @@ function wallCollision() {
 }
 
 function draw() {
-    createRect(0,0,board.width, board.height, "black")
+    createRect(0,0,canvas.width, canvas.height, "black")
 
     boardContext.fillText("Score: " + snakeBody.length, 10, 20);
     boardContext.fillStyle = "red";
@@ -103,7 +105,6 @@ class Snek{
          }
 
     tail(){ 
-        snakeBody.shift({x: this.x, y: this.y})
         snakeBody.push({x: this.x, y: this.y})
 
         
@@ -117,8 +118,8 @@ class Apple{
 
         while (true) {
             onSnake = false;
-            this.x = Math.floor(Math.random() * rows / blocksize) * blocksize
-            this.y = Math.floor(Math.random() * cols / blocksize) * blocksize
+            this.x = Math.floor(Math.random() * cols * blocksize);
+            this.y = Math.floor(Math.random() * rows * blocksize);
 
             for (let i = 0; i < snakeBody.length; i++) {
                 if (this.x == snakeBody[i].x && this.y == snakeBody[i].y) {
@@ -133,4 +134,4 @@ class Apple{
 }
 
 const snek = new Snek(20, 20, blocksize);
-const snek = new Snek(20, 20, blocksize);
+let apple = new Apple();
