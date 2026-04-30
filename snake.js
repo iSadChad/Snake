@@ -27,8 +27,17 @@ function update() {
     if (gameOver) {
         return;
     }
+    boardContext.clearRect(0, 0, board.width, board.height);
     wallCollision();
 }
+
+function appleYumYum() {
+        if(snek.x == apple.x && snek.y == apple.y) {
+            apple = new Apple();
+            snek.tail();
+        }
+    }
+
 
 function wallCollision() {
     if (snek.x == 0 && snek.dirX == -1) {
@@ -43,6 +52,16 @@ function wallCollision() {
     if (snek.y == rows && snek.dirY == 1) {
         gameOver = true;
     }
+}
+
+function draw() {
+    boardContext.fillStyle = "black";
+    boardContext.fillText("Score: " + snakeBody.length, 10, 20);
+        boardContext.fillStyle = "red";
+        boardContext.fillRect(apple.x, apple.y, blocksize, blocksize);
+
+        boardContext.fillStyle = "green";
+        boardContext.fillRect(snek.x, snek.y, blocksize, blocksize);
 }
 
 class Snek{
@@ -81,6 +100,7 @@ class Snek{
          }
 
     tail(){ 
+        snakeBody.shift({x: this.x, y: this.y})
         snakeBody.push({x: this.x, y: this.y})
 
         
@@ -96,9 +116,18 @@ class Apple{
             onSnake = false;
             this.x = Math.floor(Math.random() * rows / blocksize) * blocksize
             this.y = Math.floor(Math.random() * cols / blocksize) * blocksize
+
+            for (let i = 0; i < snakeBody.length; i++) {
+                if (this.x == snakeBody[i].x && this.y == snakeBody[i].y) {
+                    onSnake = true;
+                }
+            }
+            if (!onSnake) {
+                break;
+            }
         }
     }
 }
 
-const snek = new Snek(10,10,10);
-let apple = new Apple();
+const snek = new Snek(20, 20, blocksize);
+const snek = new Snek(20, 20, blocksize);
