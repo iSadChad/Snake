@@ -1,9 +1,11 @@
-const blocksize = 40;
-const rows = 50;
-const cols = 50;
+const blocksize = 20;
+const rows = 30;
+const cols = 30;
 const canvas = document.getElementById("board");
 const boardContext = canvas.getContext("2d");
 
+canvas.width = cols * blocksize;
+canvas.height = rows * blocksize;
 
 let gameOver = false;
 
@@ -13,7 +15,7 @@ window.onload = () => {
 }
 
 function gameLoop() {
-    setInterval(show, 1000/20)
+    setInterval(show, 1500/20)
 }
 
 function show() {
@@ -59,17 +61,17 @@ window.addEventListener("keydown", (event) => {
 
    
 function appleYumYum() {
-        if(snek.x == apple.x && snek.y == apple.y) {
-            apple = new Apple();
-            snek.tail();
+        if(snek.body[snek.body.length - 1].x == apple.x &&
+            snek.body[snek.body.length - 1].y == apple.y) {
+                snek.body[snek.body.length] = {x: x, y: y}
+                apple = new Apple();
+            }
         }
-    }
 
 
 function wallCollision() {
-    canvas.width - snek.size
-    canvas.height - snek.size
-    
+    snek.x == canvas.width - snek.size
+    snek.y == canvas.height - snek.size
     if (snek.x == 0 && snek.dirX == -1) {
         gameOver = true;
     }
@@ -82,9 +84,11 @@ function wallCollision() {
     if (snek.y == canvas.height && snek.dirY == 1) {
         gameOver = true;
     }
+    
 }
 
 function draw() {
+    
     createRect(0, 0, canvas.width, canvas.height, "white");
     createRect(snek.x, snek.y, snek.size, snek.size, "green");
     createRect(apple.x, apple.y, blocksize, blocksize, "red");
@@ -93,6 +97,7 @@ function draw() {
 
 class Snek{
         constructor(x, y, size){
+            this.body = [{x: x, y: y}]
             this.x = x
             this.y = y
             this.size = size
@@ -101,7 +106,7 @@ class Snek{
         }
      movement(){ 
         let position 
-
+        
         if ( this.dirX == 1) {
             position = {
                 x: this.x + this.size,
@@ -123,32 +128,38 @@ class Snek{
                 y: this.y - this.size
         }
         }
-        return position
+        this.body.shift();
+        this.body.push(position);
+        return position;
+    }
          }
-
-    tail(){ 
-        snek.push({x: this.x, y: this.y})
         
-    }
+  
     
-    }
 
 class Apple{
     constructor(){
-        let onSnake
+        let touchSnake
 
         while (true) {
-            onSnake = false;
+            touchSnake = false;
             this.x = Math.floor(Math.random() * cols) * blocksize;
             this.y = Math.floor(Math.random() * rows) * blocksize;
-
             
-            if (!onSnake) {
+            for (let i = 0; i < snek.body.length; i++) {
+                if (snek.body[i].x == this.x && snek.body[i].y == this.y) {
+                    touchSnake = true;
+                    break;
+                }
+            }
+            this.size = snek.size;
+            this.color = "red";
+            if (!touchSnake) {
                 break;
             }
         }
     }
 }
 
-const snek = new Snek(20, 20, blocksize);
+const snek = new Snek(40, 40, blocksize);
 let apple = new Apple();
