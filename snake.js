@@ -27,10 +27,11 @@ function show() {
 
 function update() {
     boardContext.clearRect(0, 0, canvas.width, canvas.height);
-    snek.movement()
+    snek.movement();
     wallCollision();
     appleYumYum();
     selfTouching();
+    score();
     if (gameOver) {
     return;}
 }
@@ -75,7 +76,6 @@ function appleYumYum() {
             snek.body[snek.body.length] = {x: apple.x, y: apple.y}
             apple = new Apple();
         }
-    score();
 }
 
 function selfTouching() {
@@ -89,20 +89,19 @@ function selfTouching() {
 }
 
 function wallCollision() {
-    snek.body == canvas.width - snek.size
-    snek.body == canvas.height - snek.size
+    
     let head = snek.body[snek.body.length - 1]
 
-    if (snek.x == 0 && snek.dirX == -1) {
+    if (head.x == 0 && snek.dirX == -1) {
         gameOver = true;
     }
-    if (snek.x == canvas.width && snek.dirX == 1) {
+    if (head.x == canvas.width && snek.dirX == 1) {
         gameOver = true;
     }
-    if (snek.y == 0 && snek.dirY == -1) {
+    if (head.y == 0 && snek.dirY == -1) {
         gameOver = true;
     }
-    if (snek.y == canvas.height && snek.dirY == 1) {
+    if (head.y == canvas.height && snek.dirY == 1) {
         gameOver = true;
     }
     
