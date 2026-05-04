@@ -17,24 +17,29 @@ window.onload = () => {
 function gameLoop() {
     setInterval(show, 1500/20)
 }
-
+ 
 function show() {
     update();
     draw();
 }
 
-function update() {
-    if (gameOver) {
-        return;
-    }
 
+
+function update() {
     boardContext.clearRect(0, 0, canvas.width, canvas.height);
-    let next = snek.movement();
-            snek.x = next.x;
-            snek.y = next.y;
+    snek.movement()
     wallCollision();
     appleYumYum();
+    selfTouching();
+    if (gameOver) {
+    return;}
 }
+
+function score(){
+        if (snek.body.length > 0) {
+            document.querySelector(".score").innerHTML = "Score: " + (snek.body.length - 1);
+        }      
+    }
 
 function createRect(x, y, width, height, color) {
     boardContext.fillStyle = color;
@@ -55,23 +60,39 @@ window.addEventListener("keydown", (event) => {
         } else if (event.key == "ArrowRight" && snek.dirX != -1) {
             snek.dirY = 0
             snek.dirX = 1
+        } else if (event.key == " " && gameOver) {
+            snek = new Snek(40, 40, blocksize);
+            apple = new Apple();
+            gameOver = false;
         }
     })
 
 
    
 function appleYumYum() {
-        if(snek.body[snek.body.length - 1].x == apple.x &&
-            snek.body[snek.body.length - 1].y == apple.y) {
-                snek.body[snek.body.length] = {x: x, y: y}
-                apple = new Apple();
-            }
+    if(snek.body[snek.body.length - 1].x == apple.x &&
+        snek.body[snek.body.length - 1].y == apple.y) {
+            snek.body[snek.body.length] = {x: apple.x, y: apple.y}
+            apple = new Apple();
         }
+    score();
+}
 
+function selfTouching() {
+  const head = snek.body[snek.body.length - 1];
+  for (let i = 0; i < snek.body.length - 1; i++) {
+    if (head.x === snek.body[i].x && head.y === snek.body[i].y) {
+      gameOver = true;
+      return;
+    }
+  }
+}
 
 function wallCollision() {
-    snek.x == canvas.width - snek.size
-    snek.y == canvas.height - snek.size
+    snek.body == canvas.width - snek.size
+    snek.body == canvas.height - snek.size
+    let head = snek.body[snek.body.length - 1]
+
     if (snek.x == 0 && snek.dirX == -1) {
         gameOver = true;
     }
@@ -87,52 +108,54 @@ function wallCollision() {
     
 }
 
+
 function draw() {
     
     createRect(0, 0, canvas.width, canvas.height, "white");
-    createRect(snek.x, snek.y, snek.size, snek.size, "green");
     createRect(apple.x, apple.y, blocksize, blocksize, "red");
+    for (let i = 0; i < snek.body.length; i++){
+            createRect(snek.body[i].x, snek.body[i].y, snek.size, snek.size, "green")
+    }
 }
 
 
 class Snek{
-        constructor(x, y, size){
-            this.body = [{x: x, y: y}]
-            this.x = x
-            this.y = y
-            this.size = size
-            this.dirX = 0
-            this.dirY = 1
-        }
-     movement(){ 
-        let position 
+    constructor(x, y, size){
+        this.body = [{x: x, y: y}]
+        this.x = x
+        this.y = y
+        this.size = size
+        this.dirX = 0
+        this.dirY = 1
+    }
+    movement(){ 
+        let move 
         
         if ( this.dirX == 1) {
-            position = {
-                x: this.x + this.size,
-                y: this.y
+            move = {
+                x: this.body[this.body.length - 1].x + this.size,
+                y: this.body[this.body.length - 1].y
             }
         } else if ( this.dirX == -1) {
-            position = {
-                x: this.x - this.size,
-                y: this.y
+            move = {
+                x: this.body[this.body.length - 1].x - this.size,
+                y: this.body[this.body.length - 1].y
         }
         } else if ( this.dirY == 1) {
-            position = {
-                x: this.x,
-                y: this.y + this.size
+            move = {
+                x: this.body[this.body.length - 1].x,
+                y: this.body[this.body.length - 1].y + this.size
         }
         } else if ( this.dirY == -1) {
-            position = {
-                x: this.x,
-                y: this.y - this.size
+            move = {
+                x: this.body[this.body.length - 1].x,
+                y: this.body[this.body.length - 1].y - this.size
         }
         }
         this.body.shift();
-        this.body.push(position);
-        return position;
+        this.body.push(move);
     }
-         }
+}
         
   
     
@@ -161,5 +184,5 @@ class Apple{
     }
 }
 
-const snek = new Snek(40, 40, blocksize);
+let snek = new Snek(40, 40, blocksize);
 let apple = new Apple();
