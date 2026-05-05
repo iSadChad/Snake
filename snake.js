@@ -28,7 +28,10 @@ const gameStartImg = new Image();
 gameStartImg.src = "start.jpg";    
 
 const gameOverImg = new Image();
-gameOverImg.src = "youded.jpg";
+gameOverImg.src = "youded.png";
+
+let nextDirX = 0;
+let nextDirY = 1;
 
 
 function update() {
@@ -37,6 +40,8 @@ function update() {
     }
 
     boardContext.clearRect(0, 0, canvas.width, canvas.height);
+    snek.dirX = nextDirX;
+    snek.dirY = nextDirY;
     snek.movement();
     wallCollision();
     appleYumYum();
@@ -59,17 +64,17 @@ function createRect(x, y, width, height, color) {
 
 window.addEventListener("keydown", (event) => {
         if (event.key == "ArrowUp" && snek.dirY != 1){
-            snek.dirY = -1
-            snek.dirX = 0
+            nextDirY = -1
+            nextDirX = 0
         } else if (event.key == "ArrowDown" && snek.dirY != -1){
-            snek.dirY = 1
-            snek.dirX = 0
+            nextDirY = 1
+            nextDirX = 0
         } else if (event.key == "ArrowLeft" && snek.dirX != 1){
-            snek.dirY = 0
-            snek.dirX = -1
+            nextDirY = 0
+            nextDirX = -1
         } else if (event.key == "ArrowRight" && snek.dirX != -1) {
-            snek.dirY = 0
-            snek.dirX = 1
+            nextDirY = 0
+            nextDirX = 1
         } else if (event.key == " " && gameState == "start") {
             gameState = "playing";
         }
