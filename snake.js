@@ -23,17 +23,20 @@ function show() {
     draw();
 }
 
-
+const gameOverImg = new Image();
+gameOverImg.src = "youded.png";
 
 function update() {
+    if (gameOver) {
+        return;}
+    
     boardContext.clearRect(0, 0, canvas.width, canvas.height);
     snek.movement();
     wallCollision();
     appleYumYum();
     selfTouching();
     score();
-    if (gameOver) {
-    return;}
+ 
 }
 
 function score(){
@@ -73,7 +76,7 @@ window.addEventListener("keydown", (event) => {
 function appleYumYum() {
     if(snek.body[snek.body.length - 1].x == apple.x &&
         snek.body[snek.body.length - 1].y == apple.y) {
-            snek.body[snek.body.length] = {x: apple.x, y: apple.y}
+            snek.grow = true;
             apple = new Apple();
         }
 }
@@ -92,16 +95,7 @@ function wallCollision() {
     
     let head = snek.body[snek.body.length - 1]
 
-    if (head.x == 0 && snek.dirX == -1) {
-        gameOver = true;
-    }
-    if (head.x == canvas.width && snek.dirX == 1) {
-        gameOver = true;
-    }
-    if (head.y == 0 && snek.dirY == -1) {
-        gameOver = true;
-    }
-    if (head.y == canvas.height && snek.dirY == 1) {
+    if (head.x < 0 || head.x >= canvas.width || head.y < 0 || head.y >= canvas.height) {
         gameOver = true;
     }
     
@@ -115,17 +109,25 @@ function draw() {
     for (let i = 0; i < snek.body.length; i++){
             createRect(snek.body[i].x, snek.body[i].y, snek.size, snek.size, "green")
     }
+    
+    if (gameOver) {
+       const x = canvas.width / 2 - gameOverImg.width / 2;
+        const y = canvas.height / 2 - gameOverImg.height / 2;
+
+        boardContext.drawImage(gameOverImg, x, y); 
+    }
 }
 
 
 class Snek{
     constructor(x, y, size){
         this.body = [{x: x, y: y}]
-        this.x = x
+        this.x = x 
         this.y = y
         this.size = size
         this.dirX = 0
         this.dirY = 1
+        this.grow = false;   
     }
     movement(){ 
         let move 
@@ -151,9 +153,14 @@ class Snek{
                 y: this.body[this.body.length - 1].y - this.size
         }
         }
-        this.body.shift();
-        this.body.push(move);
-    }
+        if (!this.grow) {
+            this.body.shift();
+        } else {
+            this.grow = false;
+        }
+         this.body.push(move);
+    } 
+        
 }
         
   
