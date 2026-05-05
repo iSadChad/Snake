@@ -7,8 +7,6 @@ const boardContext = canvas.getContext("2d");
 canvas.width = cols * blocksize;
 canvas.height = rows * blocksize;
 
-let gameOver = false;
-
 
 window.onload = () => {
     gameLoop();
@@ -23,13 +21,21 @@ function show() {
     draw();
 }
 
+let gameState = "start";
+
+
+const gameStartImg = new Image();
+gameStartImg.src = "start.jpg";    
+
 const gameOverImg = new Image();
-gameOverImg.src = "youded.png";
+gameOverImg.src = "youded.jpg";
+
 
 function update() {
-    if (gameOver) {
-        return;}
-    
+    if (gameState !== "playing") {
+        return;
+    }
+
     boardContext.clearRect(0, 0, canvas.width, canvas.height);
     snek.movement();
     wallCollision();
@@ -64,10 +70,13 @@ window.addEventListener("keydown", (event) => {
         } else if (event.key == "ArrowRight" && snek.dirX != -1) {
             snek.dirY = 0
             snek.dirX = 1
-        } else if (event.key == " " && gameOver) {
+        } else if (event.key == " " && gameState == "start") {
+            gameState = "playing";
+        }
+        else if (event.key == " " && gameState == "gameOver") {
             snek = new Snek(40, 40, blocksize);
             apple = new Apple();
-            gameOver = false;
+            gameState = "playing";
         }
     })
 
@@ -85,7 +94,7 @@ function selfTouching() {
   const head = snek.body[snek.body.length - 1];
   for (let i = 0; i < snek.body.length - 1; i++) {
     if (head.x === snek.body[i].x && head.y === snek.body[i].y) {
-      gameOver = true;
+      gameState = "gameOver";
       return;
     }
   }
@@ -96,21 +105,27 @@ function wallCollision() {
     let head = snek.body[snek.body.length - 1]
 
     if (head.x < 0 || head.x >= canvas.width || head.y < 0 || head.y >= canvas.height) {
-        gameOver = true;
+        gameState = "gameOver";
     }
     
 }
 
 
 function draw() {
-    
+    if (gameState == "start") {
+       const x = canvas.width / 2 - gameStartImg.width / 2;
+        const y = canvas.height / 2 - gameStartImg.height / 2;
+       
+        boardContext.drawImage(gameStartImg, x, y, gameStartImg.width, gameStartImg.height);
+    } 
+    if (gameState == "playing") {
     createRect(0, 0, canvas.width, canvas.height, "white");
     createRect(apple.x, apple.y, blocksize, blocksize, "red");
     for (let i = 0; i < snek.body.length; i++){
             createRect(snek.body[i].x, snek.body[i].y, snek.size, snek.size, "green")
+        }
     }
-    
-    if (gameOver) {
+    if (gameState == "gameOver") {
        const x = canvas.width / 2 - gameOverImg.width / 2;
         const y = canvas.height / 2 - gameOverImg.height / 2;
 
